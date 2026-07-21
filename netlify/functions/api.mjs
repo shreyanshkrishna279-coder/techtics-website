@@ -3,7 +3,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const AGREEMENTS_DIR = join(__dirname, '..', '..', 'agreements');
+const AGREEMENTS_DIR = process.env.NETLIFY ? '/tmp/agreements' : join(__dirname, '..', '..', 'agreements');
 
 function storeAgreement(type, data) {
   if (!existsSync(AGREEMENTS_DIR)) mkdirSync(AGREEMENTS_DIR, { recursive: true });
