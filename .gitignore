@@ -1,0 +1,5 @@
+node_modules/
+dist/
+server/agreements/
+server/node_modules/
+.env

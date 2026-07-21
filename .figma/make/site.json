@@ -1,0 +1,14 @@
+{
+  "title": "TechTics — Build, Automate, Scale",
+  "description": "TechTics builds websites, apps, AI agents, WhatsApp automations and AI workflows that turn businesses into digital market leaders. 100+ brands trust us.",
+  "icons": {
+    "icon": "/favicon.jpeg"
+  },
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
