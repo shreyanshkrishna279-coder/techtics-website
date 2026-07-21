@@ -236,6 +236,7 @@ function useCountUp(target: number, active: boolean) {
 
 function Nav() {
   const [scrolled, setScrolled] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 60)
@@ -243,25 +244,35 @@ function Nav() {
     return () => window.removeEventListener('scroll', h)
   }, [])
 
+  useEffect(() => {
+    if (!mobileOpen) return
+    const close = () => setMobileOpen(false)
+    window.addEventListener('resize', close)
+    return () => window.removeEventListener('resize', close)
+  }, [mobileOpen])
+
+  const navStyle: React.CSSProperties = {
+    position: 'fixed',
+    top: 0, left: 0, right: 0,
+    zIndex: 1000,
+    padding: '0 40px',
+    height: 72,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottom: scrolled ? '1px solid #1A1A1A' : '1px solid transparent',
+    background: scrolled ? 'rgba(9,9,9,0.92)' : 'transparent',
+    backdropFilter: scrolled ? 'blur(20px)' : 'none',
+    transition: 'all 0.4s ease',
+  }
+
   return (
     <motion.nav
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1, delay: 0.3 }}
-      style={{
-        position: 'fixed',
-        top: 0, left: 0, right: 0,
-        zIndex: 1000,
-        padding: '0 40px',
-        height: 72,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderBottom: scrolled ? '1px solid #1A1A1A' : '1px solid transparent',
-        background: scrolled ? 'rgba(9,9,9,0.92)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(20px)' : 'none',
-        transition: 'all 0.4s ease',
-      }}
+      style={navStyle}
+      className={mobileOpen ? 'nav-wrapper nav-mobile-open' : 'nav-wrapper'}
     >
       {/* Logo */}
       <a href="#" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
@@ -282,11 +293,12 @@ function Nav() {
       </a>
 
       {/* Center links */}
-      <div style={{ display: 'flex', gap: 40, alignItems: 'center' }}>
+      <div className="nav-links" style={{ display: 'flex', gap: 40, alignItems: 'center' }}>
         {[['Services', '#services'], ['Process', '#process'], ['Reviews', '#reviews'], ['Contact', '#contact']].map(([label, href]) => (
           <a
             key={label}
             href={href}
+            onClick={() => setMobileOpen(false)}
             style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: 14,
@@ -303,6 +315,7 @@ function Nav() {
         ))}
         <Link
           to="/client/register"
+          onClick={() => setMobileOpen(false)}
           style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: 14,
@@ -318,6 +331,7 @@ function Nav() {
         </Link>
         <Link
           to="/developer/register"
+          onClick={() => setMobileOpen(false)}
           style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: 14,
@@ -336,6 +350,8 @@ function Nav() {
       {/* CTA */}
       <Link
         to="/client/register"
+        className="nav-cta"
+        onClick={() => setMobileOpen(false)}
         style={{
           fontFamily: "'Inter', sans-serif",
           fontSize: 14,
@@ -352,6 +368,23 @@ function Nav() {
       >
         Get Started
       </Link>
+
+      {/* Hamburger */}
+      <button
+        className="nav-mobile-toggle"
+        onClick={() => setMobileOpen(!mobileOpen)}
+        style={{
+          display: 'none', background: 'none', border: 'none',
+          width: 28, height: 28, padding: 0,
+          flexDirection: 'column', justifyContent: 'center', gap: 5,
+          cursor: 'pointer',
+        }}
+        aria-label="Toggle menu"
+      >
+        <span style={{ display: 'block', width: 22, height: 2, background: '#F0F0F0', transition: 'all 0.3s', transform: mobileOpen ? 'rotate(45deg) translate(2.5px, 2.5px)' : 'none' }} />
+        <span style={{ display: 'block', width: 22, height: 2, background: '#F0F0F0', transition: 'all 0.3s', opacity: mobileOpen ? 0 : 1 }} />
+        <span style={{ display: 'block', width: 22, height: 2, background: '#F0F0F0', transition: 'all 0.3s', transform: mobileOpen ? 'rotate(-45deg) translate(2.5px, -2.5px)' : 'none' }} />
+      </button>
     </motion.nav>
   )
 }
@@ -363,6 +396,7 @@ function Nav() {
 function Hero() {
   return (
     <section
+      className="hero-section"
       style={{
         position: 'relative',
         height: '100vh',
@@ -399,7 +433,7 @@ function Hero() {
       </div>
 
       {/* Main content */}
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 1200, width: '100%' }}>
+      <div className="hero-badge" style={{ position: 'relative', zIndex: 1, maxWidth: 1200, width: '100%' }}>
         {/* Label */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -420,6 +454,7 @@ function Hero() {
         {/* Headline */}
         <div style={{ overflow: 'hidden' }}>
           <motion.h1
+            className="hero-headline"
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             transition={{ delay: 0.55, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
@@ -443,6 +478,7 @@ function Hero() {
 
         {/* Tagline — Build, Automate, Scale */}
         <motion.div
+          className="hero-tagline"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.75, duration: 0.7 }}
@@ -470,6 +506,7 @@ function Hero() {
         }}>
           {/* Subtitle */}
           <motion.p
+            className="hero-subtitle"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.7 }}
@@ -760,10 +797,10 @@ function Services() {
   const { ref, visible } = useReveal()
 
   return (
-    <section id="services" style={{ padding: '120px 40px', background: '#090909' }}>
+    <section id="services" className="section-padding" style={{ padding: '120px 40px', background: '#090909' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         {/* Header */}
-        <div ref={ref} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'end', marginBottom: 80 }}>
+        <div ref={ref} className="services-header" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'end', marginBottom: 80 }}>
           <div className={`reveal${visible ? ' visible' : ''}`}>
             <div style={{
               fontFamily: "'JetBrains Mono', monospace",
@@ -856,13 +893,13 @@ function StatNum({ val, suf, label, delay }: { val: number; suf: string; label: 
 
 function Stats() {
   return (
-    <section style={{
+    <section className="section-padding" style={{
       borderTop: '1px solid #1A1A1A',
       borderBottom: '1px solid #1A1A1A',
       padding: '100px 40px',
       background: '#090909',
     }}>
-      <div style={{
+      <div className="stats-grid" style={{
         maxWidth: 1200,
         margin: '0 auto',
         display: 'grid',
@@ -877,6 +914,7 @@ function Stats() {
         ].map((s, i) => (
           <div
             key={s.label}
+            className="stat-cell"
             style={{
               padding: '0 40px',
               borderLeft: i > 0 ? '1px solid #1A1A1A' : 'none',
@@ -897,9 +935,9 @@ function Stats() {
 function About() {
   const { ref, visible } = useReveal()
   return (
-    <section style={{ padding: '120px 40px', background: '#090909' }}>
+    <section className="section-padding" style={{ padding: '120px 40px', background: '#090909' }}>
       <div ref={ref} style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+        <div className="about-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
           {/* Left: text */}
           <div className={`reveal${visible ? ' visible' : ''}`}>
             <div style={{
@@ -984,7 +1022,7 @@ function About() {
 
           {/* Right: photo */}
           <div
-            className={`reveal${visible ? ' visible' : ''}`}
+            className={`reveal${visible ? ' visible' : ''} about-image`}
             style={{ animationDelay: '0.2s', position: 'relative' }}
           >
             {/* Main photo */}
@@ -1051,7 +1089,7 @@ function Process() {
   const { ref, visible } = useReveal()
 
   return (
-    <section id="process" style={{
+    <section id="process" className="section-padding" style={{
       borderTop: '1px solid #1A1A1A',
       padding: '120px 40px',
       background: '#0C0C0C',
@@ -1085,7 +1123,7 @@ function Process() {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0 }}>
+        <div className="process-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0 }}>
           {[
             { n: '01', title: 'Discovery', body: 'We dive deep into your business, your customers, and your goals. No assumptions — only data-driven insights that tell us exactly where to focus.' },
             { n: '02', title: 'Strategy', body: 'A custom roadmap built for your context. Not a template. Every recommendation comes with a clear, measurable outcome attached.' },
@@ -1097,7 +1135,7 @@ function Process() {
               <div
                 key={step.n}
                 ref={sRef}
-                className={`reveal${sv ? ' visible' : ''}`}
+                className={`reveal${sv ? ' visible' : ''} process-step`}
                 style={{
                   animationDelay: `${i * 0.1}s`,
                   padding: '40px 40px 40px 0',
@@ -1261,7 +1299,7 @@ function Reviews() {
   return (
     <section id="reviews" style={{ background: '#090909' }}>
       {/* Header */}
-      <div ref={ref} style={{ padding: '120px 40px 80px', maxWidth: 1200, margin: '0 auto' }}>
+      <div ref={ref} className="section-padding" style={{ padding: '120px 40px 80px', maxWidth: 1200, margin: '0 auto' }}>
         <div className={`reveal${visible ? ' visible' : ''}`}>
           <div style={{
             fontFamily: "'JetBrains Mono', monospace",
@@ -1273,7 +1311,7 @@ function Reviews() {
           }}>
             Client Stories
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'end' }}>
+          <div className="reviews-header" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'end' }}>
             <h2 style={{
               fontFamily: "'Urbanist', sans-serif",
               fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
@@ -1364,7 +1402,7 @@ function Cta() {
   const { ref, visible } = useReveal()
 
   return (
-    <section id="contact" style={{
+    <section id="contact" className="cta-section" style={{
       borderTop: '1px solid #1A1A1A',
       padding: '140px 40px',
       background: '#090909',
@@ -1372,7 +1410,7 @@ function Cta() {
       overflow: 'hidden',
     }}>
       {/* Large background text */}
-      <div style={{
+      <div className="cta-bg-text" style={{
         position: 'absolute',
         bottom: -40, right: -20,
         fontFamily: "'Urbanist', sans-serif",
@@ -1415,7 +1453,7 @@ function Cta() {
             <span style={{ color: '#C6FF00' }}>Your Empire</span>?
           </h2>
 
-          <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'center', marginBottom: 60 }}>
+          <div className="cta-buttons" style={{ display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'center', marginBottom: 60 }}>
             <a
               href="mailto:techtics55@gmail.com"
               style={{
@@ -1467,7 +1505,7 @@ function Cta() {
           </div>
 
           {/* Trust row */}
-          <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap' }}>
+          <div className="cta-trust" style={{ display: 'flex', gap: 40, flexWrap: 'wrap' }}>
             {['Free Strategy Call', 'No Lock-in Contracts', '100+ Businesses Served', '24-Hour Response'].map((item) => (
               <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 6, height: 6, background: '#C6FF00' }} />
@@ -1500,7 +1538,7 @@ function Footer() {
       padding: '60px 40px',
       background: '#090909',
     }}>
-      <div style={{
+      <div className="footer-grid" style={{
         maxWidth: 1200, margin: '0 auto',
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 1fr 1fr',
@@ -1626,7 +1664,7 @@ function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div style={{
+      <div className="footer-bottom" style={{
         borderTop: '1px solid #1A1A1A',
         paddingTop: 28,
         display: 'flex',
