@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useLocation, Link, useNavigate } from 'react-router-dom'
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
+const API = import.meta.env.DEV ? 'http://localhost:3001/api' : '/api'
 
 const AGREEMENT_POINTS = [
   'The business must provide all details and information needed for the project and may not refuse to supply information required by the team.',
