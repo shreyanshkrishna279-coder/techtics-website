@@ -5,6 +5,7 @@ import ClientForm from './pages/ClientForm'
 import DeveloperForm from './pages/DeveloperForm'
 import ClientAgreement from './pages/ClientAgreement'
 import DeveloperAgreement from './pages/DeveloperAgreement'
+import Cursor from './components/Cursor'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DATA
@@ -127,74 +128,6 @@ const INDUSTRIES = [
   'Wholesalers', 'Vendors', 'Startups', 'Service Firms',
   'Pharmacies', 'Real Estate', 'Education', 'Logistics',
 ]
-
-// ─────────────────────────────────────────────────────────────────────────────
-// CUSTOM CURSOR
-// ─────────────────────────────────────────────────────────────────────────────
-
-function Cursor() {
-  const dot = useRef<HTMLDivElement>(null)
-  const ring = useRef<HTMLDivElement>(null)
-  const ringPos = useRef({ x: 0, y: 0 })
-  const mouse = useRef({ x: 0, y: 0 })
-
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      mouse.current = { x: e.clientX, y: e.clientY }
-      if (dot.current) {
-        dot.current.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`
-      }
-    }
-    window.addEventListener('mousemove', onMove)
-
-    let raf: number
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t
-    const tick = () => {
-      ringPos.current.x = lerp(ringPos.current.x, mouse.current.x, 0.12)
-      ringPos.current.y = lerp(ringPos.current.y, mouse.current.y, 0.12)
-      if (ring.current) {
-        ring.current.style.transform = `translate(${ringPos.current.x - 18}px, ${ringPos.current.y - 18}px)`
-      }
-      raf = requestAnimationFrame(tick)
-    }
-    raf = requestAnimationFrame(tick)
-    return () => {
-      window.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(raf)
-    }
-  }, [])
-
-  return (
-    <>
-      <div
-        ref={dot}
-        style={{
-          position: 'fixed',
-          top: 0, left: 0,
-          width: 8, height: 8,
-          background: '#C6FF00',
-          borderRadius: '50%',
-          pointerEvents: 'none',
-          zIndex: 99999,
-          willChange: 'transform',
-        }}
-      />
-      <div
-        ref={ring}
-        style={{
-          position: 'fixed',
-          top: 0, left: 0,
-          width: 36, height: 36,
-          border: '1px solid rgba(198,255,0,0.5)',
-          borderRadius: '50%',
-          pointerEvents: 'none',
-          zIndex: 99998,
-          willChange: 'transform',
-        }}
-      />
-    </>
-  )
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // REVEAL HOOK
@@ -1395,6 +1328,198 @@ function Reviews() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// SIGNUP OPTIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+function SignupOptions() {
+  const { ref, visible } = useReveal()
+
+  return (
+    <section style={{
+      borderTop: '1px solid #1A1A1A',
+      padding: '120px 40px',
+      background: '#090909',
+    }}>
+      <div ref={ref} style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div className={`reveal${visible ? ' visible' : ''}`}>
+          <div style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: 11,
+            color: '#C6FF00',
+            letterSpacing: '0.15em',
+            textTransform: 'uppercase',
+            marginBottom: 24,
+          }}>
+            Get Started Today
+          </div>
+          <h2 style={{
+            fontFamily: "'Urbanist', sans-serif",
+            fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
+            fontWeight: 900,
+            color: '#F0F0F0',
+            letterSpacing: '-0.03em',
+            margin: '0 0 16px',
+            lineHeight: 1.05,
+          }}>
+            Choose Your
+            <br />
+            <span style={{ color: '#C6FF00' }}>Path.</span>
+          </h2>
+          <p style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: 16,
+            color: '#555',
+            lineHeight: 1.8,
+            maxWidth: 480,
+            marginBottom: 60,
+          }}>
+            Whether you want to grow your business with our services or join our team of developers — pick the path that fits you.
+          </p>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 24,
+        }}>
+          {/* Client card */}
+          <Link
+            to="/client/register"
+            style={{
+              textDecoration: 'none',
+              border: '1px solid #1A1A1A',
+              padding: '48px 40px',
+              transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#C6FF00'
+              e.currentTarget.style.background = 'rgba(198,255,0,0.03)'
+              e.currentTarget.style.transform = 'translateY(-4px)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#1A1A1A'
+              e.currentTarget.style.background = 'transparent'
+              e.currentTarget.style.transform = 'translateY(0)'
+            }}
+          >
+            <div style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: 48,
+              fontWeight: 400,
+              color: '#1E1E1E',
+              lineHeight: 1,
+              marginBottom: 32,
+            }}>01</div>
+            <h3 style={{
+              fontFamily: "'Urbanist', sans-serif",
+              fontSize: 28,
+              fontWeight: 700,
+              color: '#F0F0F0',
+              margin: '0 0 12px',
+              letterSpacing: '-0.02em',
+            }}>
+              I Own a Business
+            </h3>
+            <p style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 14,
+              color: '#4A4A4A',
+              lineHeight: 1.7,
+              margin: '0 0 32px',
+              flex: 1,
+            }}>
+              Get a website, app, AI automation, or WhatsApp bot for your business. We build, you grow.
+            </p>
+            <span style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 14,
+              fontWeight: 500,
+              color: '#C6FF00',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+            }}>
+              Register as Client
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </span>
+          </Link>
+
+          {/* Developer card */}
+          <Link
+            to="/developer/register"
+            style={{
+              textDecoration: 'none',
+              border: '1px solid #1A1A1A',
+              padding: '48px 40px',
+              transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#C6FF00'
+              e.currentTarget.style.background = 'rgba(198,255,0,0.03)'
+              e.currentTarget.style.transform = 'translateY(-4px)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#1A1A1A'
+              e.currentTarget.style.background = 'transparent'
+              e.currentTarget.style.transform = 'translateY(0)'
+            }}
+          >
+            <div style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: 48,
+              fontWeight: 400,
+              color: '#1E1E1E',
+              lineHeight: 1,
+              marginBottom: 32,
+            }}>02</div>
+            <h3 style={{
+              fontFamily: "'Urbanist', sans-serif",
+              fontSize: 28,
+              fontWeight: 700,
+              color: '#F0F0F0',
+              margin: '0 0 12px',
+              letterSpacing: '-0.02em',
+            }}>
+              I'm a Developer
+            </h3>
+            <p style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 14,
+              color: '#4A4A4A',
+              lineHeight: 1.7,
+              margin: '0 0 32px',
+              flex: 1,
+            }}>
+              Join our team of engineers and AI specialists. Work on real projects, earn competitive shares, and grow with us.
+            </p>
+            <span style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 14,
+              fontWeight: 500,
+              color: '#C6FF00',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+            }}>
+              Register as Developer
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </span>
+          </Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // CTA
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -1719,6 +1844,7 @@ function Home() {
       <About />
       <Process />
       <Reviews />
+      <SignupOptions />
       <Cta />
       <Footer />
     </div>

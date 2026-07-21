@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useLocation, Link, useNavigate } from 'react-router-dom'
+import Cursor from '../components/Cursor'
 
 const API = import.meta.env.DEV ? 'http://localhost:3001/api' : '/api'
 
@@ -29,6 +30,7 @@ export default function DeveloperAgreement() {
   if (!form) {
     return (
       <div style={{ background: '#090909', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 24, color: '#F0F0F0' }}>
+        <Cursor />
         <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, color: '#666' }}>No registration data found.</p>
         <Link to="/developer/register" style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: '#C6FF00', textDecoration: 'none' }}>← Start again</Link>
       </div>
@@ -58,6 +60,7 @@ export default function DeveloperAgreement() {
   if (done) {
     return (
       <div style={{ background: '#090909', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F0F0F0' }}>
+        <Cursor />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center', maxWidth: 500, padding: '0 40px' }}>
           <div style={{ width: 48, height: 48, background: '#C6FF00', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', margin: '0 auto 24px' }} />
           <h2 style={{ fontFamily: "'Urbanist', sans-serif", fontSize: 32, fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.03em', margin: '0 0 16px' }}>
@@ -102,6 +105,7 @@ export default function DeveloperAgreement() {
 
   return (
     <div style={{ background: '#090909', minHeight: '100vh', color: '#F0F0F0' }}>
+      <Cursor />
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
         padding: '0 40px', height: 72,

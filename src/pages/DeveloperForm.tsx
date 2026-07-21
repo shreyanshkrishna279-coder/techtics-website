@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate, Link } from 'react-router-dom'
+import Cursor from '../components/Cursor'
 
 const API = import.meta.env.DEV ? 'http://localhost:3001/api' : '/api'
 
@@ -57,6 +58,7 @@ export default function DeveloperForm() {
 
   return (
     <div style={{ background: '#090909', minHeight: '100vh', color: '#F0F0F0' }}>
+      <Cursor />
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
         padding: '0 40px', height: 72,
