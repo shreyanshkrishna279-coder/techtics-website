@@ -82,8 +82,8 @@ export default function ClientForm() {
       </nav>
 
       {/* Form */}
-      <div style={{ padding: '120px 40px 80px', maxWidth: 640, margin: '0 auto' }}>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+      <div className="form-page" style={{ padding: '120px 40px 80px', maxWidth: 640, margin: '0 auto' }}>
+        <motion.div className="form-page-inner" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#C6FF00', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 16 }}>
             Grow Your Business
           </div>
@@ -111,6 +111,7 @@ export default function ClientForm() {
                       onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
                       placeholder={field.placeholder}
                       rows={4}
+                      className="form-input"
                       style={{
                         width: '100%', background: '#111', border: '1px solid #1E1E1E', padding: '14px 16px',
                         color: '#F0F0F0', fontFamily: "'Inter', sans-serif", fontSize: 15, outline: 'none',
@@ -125,6 +126,7 @@ export default function ClientForm() {
                       value={(form as any)[field.key]}
                       onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
                       placeholder={field.placeholder}
+                      className="form-input"
                       style={{
                         width: '100%', background: '#111', border: '1px solid #1E1E1E', padding: '14px 16px',
                         color: '#F0F0F0', fontFamily: "'Inter', sans-serif", fontSize: 15, outline: 'none',
@@ -142,7 +144,7 @@ export default function ClientForm() {
                 <label style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#5A5A5A', letterSpacing: '0.08em', textTransform: 'uppercase', display: 'block', marginBottom: 12 }}>
                   Which services do you need?
                 </label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                <div className="form-services" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                   {SERVICE_OPTIONS.map((s) => (
                     <button
                       key={s}

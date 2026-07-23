@@ -6,6 +6,8 @@ import DeveloperForm from './pages/DeveloperForm'
 import ClientAgreement from './pages/ClientAgreement'
 import DeveloperAgreement from './pages/DeveloperAgreement'
 import Cursor from './components/Cursor'
+import CookieConsent from './components/CookieConsent'
+import PrivacyPolicy from './pages/PrivacyPolicy'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DATA
@@ -429,7 +431,7 @@ function Hero() {
         </motion.div>
 
         {/* Bottom row */}
-        <div style={{
+        <div className="hero-bottom-row" style={{
           marginTop: 32,
           display: 'flex',
           alignItems: 'flex-end',
@@ -459,13 +461,14 @@ function Hero() {
 
           {/* Stats + CTA */}
           <motion.div
+            className="hero-stats"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.05, duration: 0.7 }}
             style={{ display: 'flex', alignItems: 'center', gap: 48 }}
           >
-            <div style={{ borderLeft: '1px solid #2A2A2A', paddingLeft: 24 }}>
-              <div style={{
+            <div className="hero-stat" style={{ borderLeft: '1px solid #2A2A2A', paddingLeft: 24 }}>
+              <div className="hero-stat-num" style={{
                 fontFamily: "'Urbanist', sans-serif",
                 fontSize: 42,
                 fontWeight: 900,
@@ -522,6 +525,7 @@ function Hero() {
 
       {/* Scroll line */}
       <motion.div
+        className="hero-scroll"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6, duration: 0.8 }}
@@ -639,7 +643,7 @@ function ServiceRow({ svc, index, delay }: { svc: typeof SERVICES[0]; index: num
             }}>
               {svc.title}
             </h3>
-            <span style={{
+            <span className="service-short" style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: 15,
               color: '#4A4A4A',
@@ -980,13 +984,13 @@ function About() {
             </div>
 
             {/* Floating stat card */}
-            <div style={{
+            <div className="about-rating" style={{
               position: 'absolute',
               bottom: -20, left: -30,
               background: '#C6FF00',
               padding: '20px 28px',
             }}>
-              <div style={{
+              <div className="about-rating-num" style={{
                 fontFamily: "'Urbanist', sans-serif",
                 fontSize: 36,
                 fontWeight: 900,
@@ -1335,7 +1339,7 @@ function SignupOptions() {
   const { ref, visible } = useReveal()
 
   return (
-    <section style={{
+    <section className="signup-section" style={{
       borderTop: '1px solid #1A1A1A',
       padding: '120px 40px',
       background: '#090909',
@@ -1377,7 +1381,7 @@ function SignupOptions() {
           </p>
         </div>
 
-        <div style={{
+        <div className="signup-grid" style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: 24,
@@ -1807,21 +1811,19 @@ function Footer() {
           © {new Date().getFullYear()} TechTics. All rights reserved.
         </span>
         <div style={{ display: 'flex', gap: 32 }}>
-          {['Privacy', 'Terms'].map((item) => (
-            <a key={item} href="#" style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: 10,
-              color: '#2A2A2A',
-              textDecoration: 'none',
-              letterSpacing: '0.08em',
-              transition: 'color 0.2s',
-            }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#5A5A5A')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#2A2A2A')}
-            >
-              {item}
-            </a>
-          ))}
+          <Link to="/privacy" style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: 10,
+            color: '#2A2A2A',
+            textDecoration: 'none',
+            letterSpacing: '0.08em',
+            transition: 'color 0.2s',
+          }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#5A5A5A')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#2A2A2A')}
+          >
+            Privacy
+          </Link>
         </div>
       </div>
     </footer>
@@ -1854,12 +1856,14 @@ function Home() {
 export default function App() {
   return (
     <BrowserRouter>
+      <CookieConsent />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/client/register" element={<ClientForm />} />
         <Route path="/developer/register" element={<DeveloperForm />} />
         <Route path="/client/agreement" element={<ClientAgreement />} />
         <Route path="/developer/agreement" element={<DeveloperAgreement />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
       </Routes>
     </BrowserRouter>
   )

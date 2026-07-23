@@ -92,7 +92,7 @@ export default function ClientAgreement() {
         </Link>
       </nav>
 
-      <div style={{ padding: '120px 40px 80px', maxWidth: 720, margin: '0 auto' }}>
+      <div className="agreement-page" style={{ padding: '120px 40px 80px', maxWidth: 720, margin: '0 auto' }}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#C6FF00', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 16 }}>
             Step 2 of 2
@@ -106,7 +106,7 @@ export default function ClientAgreement() {
             Please read the following terms carefully. By agreeing, you enter into a formal engagement with TechTics.
           </p>
 
-          <div style={{ border: '1px solid #1A1A1A', padding: 32, marginBottom: 40 }}>
+          <div className="agreement-box" style={{ border: '1px solid #1A1A1A', padding: 32, marginBottom: 40 }}>
             <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: '#666', lineHeight: 1.7, marginBottom: 24, fontStyle: 'italic' }}>
               This Agreement sets forth the terms and conditions between TechTics ("the Company") and the client ("you"). By accepting this agreement, you acknowledge and agree to the following:
             </p>

@@ -227,6 +227,9 @@ body {
 
   .agreement-page { padding: 100px 20px 60px !important; }
   .agreement-box { padding: 20px !important; }
+
+  .signup-grid { grid-template-columns: 1fr !important; }
+  .signup-section { padding: 80px 20px !important; }
 }
 
 /* Nav mobile toggle - hidden by default */
