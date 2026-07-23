@@ -4,6 +4,7 @@ import nodemailer from 'nodemailer';
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { supabase } from './supabase.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -47,6 +48,15 @@ function storeAgreement(type, data) {
   return filename;
 }
 
+async function insertToSupabase(table, data) {
+  try {
+    const { error } = await supabase.from(table).insert(data);
+    if (error) console.warn(`[WARN] Supabase insert to ${table} failed: ${error.message}`);
+  } catch (err) {
+    console.warn(`[WARN] Supabase error (${table}): ${err.message}`);
+  }
+}
+
 app.post('/api/client-form', async (req, res) => {
   try {
     const { name, contact, businessName, businessDetails, services } = req.body;
@@ -59,6 +69,7 @@ app.post('/api/client-form', async (req, res) => {
       <p><strong>Services Requested:</strong> ${services?.join(', ') || 'Not specified'}</p>
     `;
     await sendEmail({ subject: `New Client Registration - ${businessName}`, html });
+    await insertToSupabase('client_forms', { name, contact, business_name: businessName, business_details: businessDetails, services });
     res.json({ success: true });
   } catch (err) {
     console.error('Client form error:', err);
@@ -76,6 +87,7 @@ app.post('/api/developer-form', async (req, res) => {
       <p><strong>Specialties:</strong> ${specialties?.join(', ') || 'Not specified'}</p>
     `;
     await sendEmail({ subject: `New Developer Registration - ${name}`, html });
+    await insertToSupabase('developer_forms', { name, years_of_experience: yearsOfExperience, specialties });
     res.json({ success: true });
   } catch (err) {
     console.error('Developer form error:', err);
@@ -98,6 +110,7 @@ app.post('/api/client-agreement', async (req, res) => {
       <p><strong>Reference:</strong> ${filename}</p>
     `;
     await sendEmail({ subject: `Client Agreement Signed - ${businessName}`, html });
+    await insertToSupabase('client_agreements', { ...req.body, agreed_at: new Date().toISOString(), reference: filename });
     res.json({ success: true, reference: filename });
   } catch (err) {
     console.error('Client agreement error:', err);
@@ -120,6 +133,7 @@ app.post('/api/developer-agreement', async (req, res) => {
       <p><strong>Reference:</strong> ${filename}</p>
     `;
     await sendEmail({ subject: `Developer Agreement Signed - ${name}`, html });
+    await insertToSupabase('developer_agreements', { ...req.body, agreed_at: new Date().toISOString(), reference: filename });
     res.json({ success: true, reference: filename });
   } catch (err) {
     console.error('Developer agreement error:', err);

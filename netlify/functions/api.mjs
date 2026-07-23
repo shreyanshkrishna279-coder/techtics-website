@@ -2,6 +2,7 @@ import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import nodemailer from 'nodemailer';
+import { supabase } from './supabaseClient.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const AGREEMENTS_DIR = process.env.NETLIFY ? '/tmp/agreements' : join(__dirname, '..', '..', 'agreements');
@@ -36,6 +37,15 @@ async function sendEmail({ subject, html }) {
     });
   } catch (err) {
     console.warn(`[WARN] Email send failed (non-blocking): ${err.message}`);
+  }
+}
+
+async function insertToSupabase(table, data) {
+  try {
+    const { error } = await supabase.from(table).insert(data);
+    if (error) console.warn(`[WARN] Supabase insert to ${table} failed: ${error.message}`);
+  } catch (err) {
+    console.warn(`[WARN] Supabase error (${table}): ${err.message}`);
   }
 }
 
@@ -79,6 +89,7 @@ export async function handler(event) {
         <p><strong>Services Requested:</strong> ${services?.join(', ') || 'Not specified'}</p>
       `;
       await sendEmail({ subject: `New Client Registration - ${businessName}`, html });
+      await insertToSupabase('client_forms', { name, contact, business_name: businessName, business_details: businessDetails, services });
       return respond(200, { success: true });
     }
 
@@ -92,6 +103,7 @@ export async function handler(event) {
         <p><strong>Specialties:</strong> ${specialties?.join(', ') || 'Not specified'}</p>
       `;
       await sendEmail({ subject: `New Developer Registration - ${name}`, html });
+      await insertToSupabase('developer_forms', { name, years_of_experience: yearsOfExperience, specialties });
       return respond(200, { success: true });
     }
 
@@ -107,6 +119,7 @@ export async function handler(event) {
         <p><strong>Reference:</strong> ${filename}</p>
       `;
       await sendEmail({ subject: `Client Agreement Signed - ${data.businessName || data.name}`, html });
+      await insertToSupabase('client_agreements', { ...data, agreed_at: new Date().toISOString(), reference: filename });
       return respond(200, { success: true, reference: filename });
     }
 
@@ -122,6 +135,7 @@ export async function handler(event) {
         <p><strong>Reference:</strong> ${filename}</p>
       `;
       await sendEmail({ subject: `Developer Agreement Signed - ${data.name}`, html });
+      await insertToSupabase('developer_agreements', { ...data, agreed_at: new Date().toISOString(), reference: filename });
       return respond(200, { success: true, reference: filename });
     }
 
