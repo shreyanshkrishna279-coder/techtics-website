@@ -492,6 +492,7 @@ function Hero() {
 
             <a
               href="#services"
+              className="hero-cta-btn"
               style={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: 14,
@@ -1080,7 +1081,7 @@ function Process() {
                   paddingLeft: i > 0 ? 40 : 0,
                 }}
               >
-                <div style={{
+                <div className="process-num" style={{
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: 48,
                   fontWeight: 400,
@@ -1150,6 +1151,7 @@ function ReviewPaper({
 
   return (
     <motion.div
+      className="reviews-card"
       style={{
         x, y, rotate, scale, opacity,
         position: 'absolute',
@@ -1315,7 +1317,7 @@ function Reviews() {
           </motion.div>
 
           {/* Card stack */}
-          <div style={{ position: 'relative', width: 320, height: 220 }}>
+          <div className="reviews-stack" style={{ position: 'relative', width: 320, height: 220 }}>
             {REVIEWS.map((review, i) => (
               <ReviewPaper
                 key={review.id}
@@ -1389,6 +1391,7 @@ function SignupOptions() {
           {/* Client card */}
           <Link
             to="/client/register"
+            className="signup-card"
             style={{
               textDecoration: 'none',
               border: '1px solid #1A1A1A',
@@ -1455,6 +1458,7 @@ function SignupOptions() {
           {/* Developer card */}
           <Link
             to="/developer/register"
+            className="signup-card"
             style={{
               textDecoration: 'none',
               border: '1px solid #1A1A1A',

@@ -106,7 +106,7 @@ export default function DeveloperAgreement() {
   return (
     <div style={{ background: '#090909', minHeight: '100vh', color: '#F0F0F0' }}>
       <Cursor />
-      <nav style={{
+      <nav className="agreement-nav" style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
         padding: '0 40px', height: 72,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
